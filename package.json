@@ -1,12 +1,15 @@
 {
   "name": "hola-mundo",
   "version": "1.0.0",
-  "description": "Práctica DevOps - Hola Mundo con Node.js, Docker y Docker Hub",
+  "description": "Practica DevOps - Hola Mundo con Node.js, Docker y Docker Hub",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "test": "jest"
   },
   "author": "Tuletta",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
 }
