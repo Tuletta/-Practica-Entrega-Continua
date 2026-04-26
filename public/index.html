@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hola Mundo — DevOps Practice</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #222230;
+      --accent: #00e5a0;
+      --accent2: #6c63ff;
+      --text: #f0f0f8;
+      --muted: #555570;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Glow orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: rgba(0,229,160,0.08);
+      top: -150px; left: -150px;
+      animation: drift 8s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(108,99,255,0.08);
+      bottom: -100px; right: -100px;
+      animation: drift 10s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to { transform: translate(40px, 30px); }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: 700px;
+      width: 100%;
+    }
+
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0,229,160,0.08);
+      border: 1px solid rgba(0,229,160,0.2);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.2s;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    h1 {
+      font-size: clamp(3.5rem, 12vw, 7rem);
+      font-weight: 800;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.4s;
+    }
+    h1 .line-1 { display: block; color: var(--text); }
+    h1 .line-2 {
+      display: block;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.6s;
+    }
+
+    /* Terminal card */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: left;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 0.8s;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+      margin-left: auto;
+      margin-right: auto;
+      letter-spacing: 0.05em;
+    }
+    .terminal-body {
+      padding: 1.25rem 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 2;
+    }
+    .line { display: flex; gap: 0.75rem; }
+    .prompt { color: var(--accent); }
+    .cmd { color: #f0f0f8; }
+    .output { color: var(--muted); padding-left: 1.5rem; }
+    .highlight { color: var(--accent2); }
+
+    /* Stack pills */
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease forwards 1s;
+    }
+    .pill {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .pill:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Footer */
+    .footer {
+      position: fixed;
+      bottom: 1.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 1.2s;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Práctica DevOps — Ciclo Completo
+    </div>
+
+    <h1>
+      <span class="line-1">Hola,</span>
+      <span class="line-2">Mundo.</span>
+    </h1>
+
+    <p class="subtitle">// Node.js · Docker · Docker Hub · GitHub</p>
+
+    <div class="terminal">
+      <div class="terminal-header">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">bash — hola-mundo</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span><span class="cmd">docker build -t tuletta/hola-mundo .</span></div>
+        <div class="output">Successfully built <span class="highlight">a3f8c2d1e9b0</span></div>
+        <div class="line"><span class="prompt">$</span><span class="cmd">docker run -p 3000:3000 tuletta/hola-mundo</span></div>
+        <div class="output">🚀 Servidor corriendo en <span class="highlight">http://localhost:3000</span></div>
+        <div class="line"><span class="prompt">$</span><span class="cmd">docker push tuletta/hola-mundo</span></div>
+        <div class="output">Image pushed to <span class="highlight">Docker Hub</span> ✓</div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <span class="pill">Node.js 20</span>
+      <span class="pill">Docker</span>
+      <span class="pill">Docker Hub</span>
+      <span class="pill">GitHub</span>
+      <span class="pill">CI/CD</span>
+    </div>
+  </div>
+
+  <p class="footer">Tuletta · Práctica Entrega Continua · 2025</p>
+</body>
+</html>
